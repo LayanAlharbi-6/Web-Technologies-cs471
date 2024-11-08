@@ -1,4 +1,5 @@
 from django.http import HttpResponse
+from django.shortcuts import render
 
 def index(request):
     name = request.GET.get("name") or "world!"
@@ -6,8 +7,9 @@ def index(request):
 
 def index2(request, val1=0):
     return HttpResponse("value1 = " + str(val1))
+
 def viewbook(request, bookId):
-    # افترض أن لدينا الكتب التالية (مثلاً في قاعدة بيانات)
+    # افتراض وجود بيانات الكتب
     book1 = {'id': 123, 'title': 'Continuous Delivery', 'author': 'J. Humble and D. Farley'}
     book2 = {'id': 456, 'title': 'Secrets of Reverse Engineering', 'author': 'E. Eilam'}
     
@@ -19,3 +21,16 @@ def viewbook(request, bookId):
     
     context = {'book': targetBook}
     return render(request, 'bookmodule/show.html', context)
+
+# الدوال الخاصة بمهام المختبر
+def links_page(request):
+    return render(request, 'bookmodule/links.html')
+
+def text_formatting_page(request):
+    return render(request, 'bookmodule/text_formatting.html')
+
+def listing_page(request):
+    return render(request, 'bookmodule/listing.html')
+
+def tables_page(request):
+    return render(request, 'bookmodule/tables.html')

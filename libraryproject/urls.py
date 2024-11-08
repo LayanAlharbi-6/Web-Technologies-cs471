@@ -17,18 +17,20 @@ Including another URLconf
 
 from django.contrib import admin
 from django.urls import path
-import apps.bookmodule.views  # استيراد الدوال من bookmodule
+from apps.bookmodule import views  # استيراد الدوال من bookmodule
 
-# تحديد الروابط في قائمة urlpatterns
+# قائمة الروابط
 urlpatterns = [
     path('admin/', admin.site.urls),  # رابط لوحة التحكم Django admin
 
-    # رابط للدالة index لعرض الرسالة الأساسية
-    path('', apps.bookmodule.views.index),
+    # روابط الدوال الأساسية
+    path('', views.index),  # الدالة index لعرض الصفحة الرئيسية
+    path('index2/<int:val1>/', views.index2),  # الدالة index2 مع متغير val1
+    path('<int:bookId>/', views.viewbook),  # الدالة viewbook مع متغير bookId
 
-    # رابط للدالة index2 مع قبول متغير val1 كجزء من الرابط
-    path('index2/<int:val1>/', apps.bookmodule.views.index2),
-
-    # رابط للدالة viewbook لقبول متغير bookId وعرض تفاصيل كتاب معين
-    path('<int:bookId>/', apps.bookmodule.views.viewbook),
+    # الروابط المطلوبة لكل مهمة من مختبر HTML/CSS
+    path('books/html5/links', views.links_page, name='books.links'),
+    path('books/html5/text/formatting', views.text_formatting_page, name='books.text_formatting'),
+    path('books/html5/listing', views.listing_page, name='books.listing'),
+    path('books/html5/tables', views.tables_page, name='books.tables'),
 ]
