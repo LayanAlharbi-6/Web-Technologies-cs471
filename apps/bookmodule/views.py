@@ -34,3 +34,35 @@ def listing_page(request):
 
 def tables_page(request):
     return render(request, 'bookmodule/tables.html')
+
+
+# دالة لعرض صفحة البحث ومعالجة نتائج البحث
+def search_page(request):
+    if request.method == "POST":
+        keyword = request.POST.get('keyword', '').lower()
+        isTitle = request.POST.get('option1')
+        isAuthor = request.POST.get('option2')
+
+        # الحصول على قائمة الكتب
+        books = __getBooksList()
+        filtered_books = []
+
+        for book in books:
+            found = False
+            if isTitle and keyword in book['title'].lower():
+                found = True
+            if not found and isAuthor and keyword in book['author'].lower():
+                found = True
+            if found:
+                filtered_books.append(book)
+
+        return render(request, 'bookmodule/bookList.html', {'books': filtered_books})
+
+    return render(request, 'bookmodule/search.html')
+
+# دالة للحصول على قائمة الكتب (مثال على قاعدة بيانات وهمية)
+def __getBooksList():
+    book1 = {'id': 12344321, 'title': 'Continuous Delivery', 'author': 'J.Humble and D. Farley'}
+    book2 = {'id': 56788765, 'title': 'Reversing: Secrets of Reverse Engineering', 'author': 'E. Eilam'}
+    book3 = {'id': 43211234, 'title': 'The Hundred-Page Machine Learning Book', 'author': 'Andriy Burkov'}
+    return [book1, book2, book3]

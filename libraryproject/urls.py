@@ -33,4 +33,7 @@ urlpatterns = [
     path('books/html5/text/formatting', views.text_formatting_page, name='books.text_formatting'),
     path('books/html5/listing', views.listing_page, name='books.listing'),
     path('books/html5/tables', views.tables_page, name='books.tables'),
+     path('admin/', admin.site.urls),
+    path('books/search', views.search_page, name='books.search'),  # رابط صفحة البحث
 ]
+
