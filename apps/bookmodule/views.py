@@ -1,13 +1,55 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from .models import Book
 
+# دالة الإدخال اليدوي للكتب في قاعدة البيانات
+def add_books(request):
+    books_data = [
+        {"title": "Continuous Delivery", "author": "J. Humble and D. Farley", "price": 120.00, "edition": 3},
+        {"title": "Reversing: Secrets of Reverse Engineering", "author": "E. Eilam", "price": 97.00, "edition": 2},
+        {"title": "The Hundred-Page Machine Learning Book", "author": "Andriy Burkov", "price": 100.00, "edition": 4},
+    ]
+    for data in books_data:
+        Book.objects.create(**data)
+    return HttpResponse("Books added successfully!")
+
+# استعلام بسيط للكتب
+def simple_query(request):
+    books = Book.objects.filter(title__icontains='and')  # استعلام للبحث عن كتب تحتوي على كلمة "and"
+    response = "<h1>Simple Query Results:</h1>"
+    for book in books:
+        response += f"<p>ID: {book.id}, Title: {book.title}, Author: {book.author}, Price: {book.price}, Edition: {book.edition}</p>"
+    return HttpResponse(response)
+
+# استعلام معقد للكتب
+def complex_query(request):
+    books = Book.objects.filter(
+        author__isnull=False
+    ).filter(
+        title__icontains='and'
+    ).filter(
+        edition__gte=2
+    ).exclude(
+        price__lte=100
+    )[:10]
+    if books.exists():
+        response = "<h1>Complex Query Results:</h1>"
+        for book in books:
+            response += f"<p>ID: {book.id}, Title: {book.title}, Author: {book.author}, Price: {book.price}, Edition: {book.edition}</p>"
+    else:
+        response = "<h1>No books matched the query.</h1>"
+    return HttpResponse(response)
+
+# الدالة index لعرض الرسالة
 def index(request):
     name = request.GET.get("name") or "world!"
     return HttpResponse("Hello, " + name)
 
+# دالة index2 مع متغير val1
 def index2(request, val1=0):
     return HttpResponse("value1 = " + str(val1))
 
+# عرض بيانات الكتاب بناءً على ID
 def viewbook(request, bookId):
     # افتراض وجود بيانات الكتب
     book1 = {'id': 123, 'title': 'Continuous Delivery', 'author': 'J. Humble and D. Farley'}
@@ -22,7 +64,7 @@ def viewbook(request, bookId):
     context = {'book': targetBook}
     return render(request, 'bookmodule/show.html', context)
 
-# الدوال الخاصة بمهام المختبر
+# صفحات HTML المطلوبة
 def links_page(request):
     return render(request, 'bookmodule/links.html')
 
@@ -35,8 +77,7 @@ def listing_page(request):
 def tables_page(request):
     return render(request, 'bookmodule/tables.html')
 
-
-# دالة لعرض صفحة البحث ومعالجة نتائج البحث
+# صفحة البحث ومعالجة النتائج
 def search_page(request):
     if request.method == "POST":
         keyword = request.POST.get('keyword', '').lower()
@@ -60,9 +101,10 @@ def search_page(request):
 
     return render(request, 'bookmodule/search.html')
 
-# دالة للحصول على قائمة الكتب (مثال على قاعدة بيانات وهمية)
+# قاعدة بيانات وهمية للكتب
 def __getBooksList():
     book1 = {'id': 12344321, 'title': 'Continuous Delivery', 'author': 'J.Humble and D. Farley'}
     book2 = {'id': 56788765, 'title': 'Reversing: Secrets of Reverse Engineering', 'author': 'E. Eilam'}
     book3 = {'id': 43211234, 'title': 'The Hundred-Page Machine Learning Book', 'author': 'Andriy Burkov'}
     return [book1, book2, book3]
+
