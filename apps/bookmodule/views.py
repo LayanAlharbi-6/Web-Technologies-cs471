@@ -1,5 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import render
+from django.db.models import Q
 from .models import Book
 
 # دالة الإدخال اليدوي للكتب في قاعدة البيانات
@@ -39,6 +40,13 @@ def complex_query(request):
     else:
         response = "<h1>No books matched the query.</h1>"
     return HttpResponse(response)
+
+# عرض الكتب بسعر أقل من أو يساوي 50 (المطلوب إضافة هذه الدالة)
+def task1_view(request):
+    # تصفية الكتب بسعر أقل من أو يساوي 50
+    books = Book.objects.filter(Q(price__lte=50))
+    # عرض النتائج في قالب HTML
+    return render(request, 'bookmodule/task1.html', {'books': books})
 
 # الدالة index لعرض الرسالة
 def index(request):
@@ -107,4 +115,5 @@ def __getBooksList():
     book2 = {'id': 56788765, 'title': 'Reversing: Secrets of Reverse Engineering', 'author': 'E. Eilam'}
     book3 = {'id': 43211234, 'title': 'The Hundred-Page Machine Learning Book', 'author': 'Andriy Burkov'}
     return [book1, book2, book3]
+
 

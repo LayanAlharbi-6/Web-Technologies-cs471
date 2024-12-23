@@ -25,6 +25,7 @@ urlpatterns = [
     path('add-books/', views.add_books, name='add_books'),  # رابط لإضافة الكتب
     path('books/simple-query/', views.simple_query, name='simple_query'),  # استعلام بسيط
     path('books/complex-query/', views.complex_query, name='complex_query'),  # استعلام معقد
+    path('books/lab8/task1', views.task1_view, name='task1'),
 
     # روابط إضافية (إذا كانت مطلوبة مستقبلاً)
     # path('books/some-other-path', views.some_other_view, name='some_other_view'),
